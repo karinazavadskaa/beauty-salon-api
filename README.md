@@ -74,6 +74,6 @@ curl -X POST http://localhost:8081/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"system.admin@beauty.ru","password":"system.admin123"}'
 
-### Запрос с токеном
+
 curl -X GET http://localhost:8081/api/clients \
   -H "Authorization: Bearer <ваш_токен>"
