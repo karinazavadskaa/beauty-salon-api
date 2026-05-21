@@ -1,0 +1,84 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.0.6'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
+}
+
+group = 'com.beauty'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(26)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Бэкенд
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// База данных
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.7'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.7'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.7'
+
+	// ТЕСТЫ
+	testImplementation platform('org.junit:junit-bom:5.10.0')
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework:spring-web'
+	testImplementation 'org.springframework:spring-webmvc'
+	testImplementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	testImplementation 'com.h2database:h2'
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacoco {
+	toolVersion = "0.8.14"
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+		csv.required = false
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					'**/dto/**',
+					'**/entity/**',
+					'**/config/**',
+					'**/SalonApplication.class'
+			])
+		}))
+	}
+}
