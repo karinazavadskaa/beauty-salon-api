@@ -50,7 +50,7 @@ PUT /clients/{id} - обновить
 
 DELETE /clients/{id} - удалить
 
-Сотрудники (Employees)
+Сотрудник (Employees)
 GET /employees - получить всех (только System Admin)
 
 GET /employees/{id} - получить по ID
